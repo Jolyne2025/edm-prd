@@ -1,101 +1,184 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PRD：EDM 一期新推送策略 — 品搜推荐策略优化（草案 v0）</title><style>
-:root{--accent:#1a5fb4;--bg:#f5f7fa;--card:#ffffff;--line:#e3e8ef;--text:#24292f;--muted:#6b7280}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;line-height:1.65}
-.page{max-width:960px;margin:0 auto;padding:32px 24px 80px}
-header.doc-head{background:linear-gradient(135deg,#1a5fb4,#0d3b75);color:#fff;border-radius:14px;padding:28px 32px;margin-bottom:28px;box-shadow:0 6px 24px rgba(13,59,117,.18)}
-header.doc-head h1{margin:0 0 10px;font-size:24px;line-height:1.35}
-.badges{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
-.badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 12px;font-size:12.5px}
-.badge.p0{background:#e5484d;border-color:#e5484d;font-weight:600}
-.badge.draft{background:#f5a623;border-color:#f5a623;color:#fff;font-weight:600}
-.meta{font-size:13.5px;color:rgba(255,255,255,.85);margin-top:6px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:18px 0;box-shadow:0 2px 8px rgba(16,24,40,.05)}
-h2{font-size:19px;color:var(--accent);border-left:5px solid var(--accent);padding-left:12px;margin:30px 0 8px}
-h3{font-size:16px;margin:22px 0 6px}
-h4{font-size:14.5px;margin:16px 0 4px}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px;background:#fff;border-radius:8px;overflow:hidden}
-th{background:#eef3fa;color:#1a3558;text-align:left;padding:9px 12px;font-weight:600;border:1px solid var(--line)}
-td{padding:8px 12px;border:1px solid var(--line);vertical-align:top}
-tbody tr:nth-child(even){background:#f8fafc}
-td strong{color:#c0392b}
-blockquote{border-left:4px solid #f5a623;background:#fffaf0;margin:14px 0;padding:12px 16px;border-radius:0 8px 8px 0;color:#5b4a1e;font-size:13.5px}
-ul,ol{margin:8px 0;padding-left:24px}
-li{margin:4px 0}
-ul.sub{margin:4px 0 8px;color:#374151}
-code{background:#eef1f5;border-radius:4px;padding:1px 6px;font-size:12.5px;color:#0d3b75}
-hr{border:none;border-top:1px dashed var(--line);margin:26px 0}
-p{font-size:14.5px}
-@media print{body{background:#fff}.card{box-shadow:none}header.doc-head{-webkit-print-color-adjust:exact}}
-</style></head>
-<body><div class="page"><header class="doc-head">
-  <h1>PRD：EDM 一期新推送策略 — 品搜推荐策略优化（草案 v0）</h1>
-  <div class="meta">起草人：大桔Jolyne（张程程）｜起草日期：2026-08-15｜评审时间：8.18（暂定）</div>
-  <div class="badges">
-    <span class="badge">Jira：UC-124</span>
-    <span class="badge p0">P0</span>
-    <span class="badge">阶段：BRD</span>
-    <span class="badge draft">草稿 · 待 8.18 评审确认</span>
-  </div>
-</header><main><h1>PRD：EDM 一期新推送策略 — 品搜推荐策略优化（草案 v0）</h1>
-<blockquote>起草人：大桔Jolyne（张程程）｜起草日期：2026-08-15｜评审时间：<strong>8.18</strong>（暂定）<br>Jira：UC-124｜优先级：P0｜阶段：BRD<br>状态：<strong>草稿，待 8.18 评审确认</strong><br>信息口径来源：0814/0731 Lifecycle Engine Weekly、钉群「lifecycle触达项目群」「push edm lifecycle触达数据小团」、Teams 与 Xie Winnie 对话、BPG「[EDM] CTR drop for product recommendation emails」、PGS「PRD_Product_Email_Notifications_Buyers」</blockquote>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD：EDM 一期新推送策略 — 品搜推荐策略优化（草案 v1）</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif; background:#f5f6fa; color:#2d3436; line-height:1.7; padding:24px; }
+.container { max-width:960px; margin:0 auto; }
+header.hero { background:linear-gradient(135deg,#1a2980 0%,#26d0ce 100%); color:#fff; border-radius:12px; padding:32px 36px; margin-bottom:28px; box-shadow:0 4px 16px rgba(26,41,128,.25); }
+header.hero h1 { font-size:26px; margin-bottom:10px; letter-spacing:.5px; }
+.badges { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+.badge { background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35); padding:3px 12px; border-radius:20px; font-size:12.5px; }
+.card { background:#fff; border-radius:10px; padding:26px 30px; margin-bottom:22px; box-shadow:0 1px 5px rgba(0,0,0,.07); }
+h2 { font-size:20px; color:#1a2980; border-left:4px solid #26d0ce; padding-left:12px; margin-bottom:16px; }
+h3 { font-size:16.5px; color:#2d3436; margin:18px 0 10px; }
+h4 { font-size:15px; color:#57606f; margin:14px 0 8px; }
+h2, h3 { border-bottom:1px solid #eee; padding-bottom:8px; }
+p { margin:8px 0; }
+ul, ol { margin:8px 0 8px 22px; }
+li { margin:4px 0; }
+li.chk { list-style:none; margin-left:-22px; }
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+th { background:#1a2980; color:#fff; padding:9px 12px; text-align:left; font-weight:600; }
+td { padding:8px 12px; border-bottom:1px solid #eef0f5; }
+tbody tr:nth-child(even) { background:#f8f9fd; }
+tbody tr:hover { background:#eef4ff; }
+blockquote { background:#fff8e6; border-left:4px solid #f0b429; padding:10px 14px; border-radius:0 6px 6px 0; margin:12px 0; font-size:14px; }
+code { background:#eef1f6; border-radius:4px; padding:1px 6px; font-size:13px; font-family:'SF Mono',Menlo,monospace; }
+hr { border:none; border-top:1px dashed #d0d5e0; margin:20px 0; }
+.red { color:#d63031; font-weight:700; }
+.blue { color:#0984e3; font-weight:700; }
+blockquote .red { color:#d63031; }
+@media print { body { background:#fff; padding:0; } .card { box-shadow:none; border:1px solid #eee; } header.hero { -webkit-print-color-adjust:exact; } }
+</style>
+</head>
+<body>
+<div class="container">
+<header class="hero">
+<h1>📧 PRD：EDM 一期新推送策略 — 品搜推荐策略优化（草案 v1）</h1>
+<div class="badges"><span class="badge">Jira UC-124</span><span class="badge">P0</span><span class="badge">BRD</span><span class="badge">评审 8.24（下周一）</span><span class="badge">草稿</span></div>
+</header>
+<h1>PRD：EDM 一期新推送策略 — 品搜推荐策略优化（草案 v1）</h1>
+<blockquote>起草人：大桔Jolyne（张程程）｜起草日期：2026-08-15｜更新日期：2026-08-21｜评审时间：<strong><span class="blue">8.24</span>（下周一）</strong><br>Jira：UC-124｜优先级：P0｜阶段：BRD<br>状态：<strong>草稿，待 <span class="blue">8.24</span> 评审确认</strong><br>信息口径来源：0814/0731 Lifecycle Engine Weekly、钉群「lifecycle触达项目群」「push edm lifecycle触达数据小团」、Teams 与 Xie Winnie 对话、BPG「[EDM] CTR drop for product recommendation emails」、PGS「PRD_Product_Email_Notifications_Buyers」（详见附录 A.2）</blockquote>
 <hr>
-<h2>1. 项目概述</h2>
-<table><thead><tr><th>项</th><th>内容</th></tr></thead><tbody><tr><td>项目名称</td><td>EDM 一期新推送策略：品搜推荐策略优化</td></tr><tr><td>所属</td><td>Lifecycle 触达项目（EDM 渠道）</td></tr><tr><td>关联 Jira</td><td>UC-124（本工单）、PGS-856 / PGS-312（发送频率与重发逻辑）、PGS-254（原始 PRD epic）、UC-363（campaign 下钻字段）、DAN-719（email_name 维度 UV/AB）</td></tr><tr><td>目标渠道</td><td>EDM（HubSpot 发送的产品推荐邮件）</td></tr><tr><td>策略别名</td><td>产品推荐邮件（product recommendation email）/ 品搜推荐策略</td></tr><tr><td>评审时间</td><td>8.18（P0）</td></tr></tbody></table>
+<h2>1. 需求重点</h2>
 <p><strong>一句话目标</strong>：修复品搜推荐策略的发送逻辑失控与邮件质量下滑问题，在控制频率、不损害用户体验的前提下，恢复该策略对 UV/AB/AB2 的稳定正向贡献。</p>
+<table><thead><tr><th>项</th><th>内容</th></tr></thead><tbody><tr><td>项目名称</td><td>EDM 一期新推送策略：品搜推荐策略优化</td></tr><tr><td>所属</td><td>Lifecycle 触达项目（EDM 渠道）</td></tr><tr><td>关联 Jira</td><td>UC-124（本工单）、PGS-856 / PGS-312（发送频率与重发逻辑）、PGS-254（原始 PRD epic）、UC-363（campaign 下钻字段）、DAN-719（email_name 维度 UV/AB）</td></tr><tr><td>目标渠道</td><td>EDM（HubSpot 发送的产品推荐邮件）</td></tr><tr><td>策略别名</td><td>产品推荐邮件（product recommendation email）/ 品搜推荐策略</td></tr><tr><td>评审时间</td><td><strong><span class="blue">8.24</span>（下周一）</strong></td></tr></tbody></table>
+<p><strong>核心需求（4 条）</strong>：</p>
+<ol><li><strong>频率可控</strong>：修复重发逻辑（PGS-856），实现每人每周至多 1 封、无互动用户 N 周后停止发送</li><li><strong>质量回升</strong>：修复模板图片展示问题，CTR（open→click）恢复并稳定在 <span class="red">17%+</span>（5-6 月水位区间）</li><li><strong>转化恢复</strong>：恢复策略对 AB/AB2 的增量贡献（保持 ≥<span class="red">+2</span>），重建 EDM 发送量基本盘</li><li><strong>体验不恶化</strong>：退订率、投诉率、垃圾邮件率不上升</li></ol>
 <hr>
-<h2>2. 背景</h2>
-<h3>2.1 策略定义（现状）</h3>
+<h2>2. 优化目标与成功指标（建议，待评审）</h2>
+<h3>2.1 优化目标</h3>
+<ol><li><strong>频率可控</strong>：修复重发逻辑，实现每人每周至多 1 封、无互动用户 N 周后停止（具体规则见 §3.1）</li><li><strong>质量回升</strong>：修复模板展示问题，CTR（open→click）恢复并稳定在 <span class="red">17%+</span>（5-6 月水位区间）</li><li><strong>转化恢复</strong>：恢复策略对 AB/AB2 的增量贡献，重建发送量基本盘</li><li><strong>体验不恶化</strong>：退订率、投诉率、垃圾邮件率不上升</li></ol>
+<h3>2.2 成功指标（监测口径以 EDM 业务口径初版为准，<span class="blue">8.24</span> 评审前交付）</h3>
+<table><thead><tr><th>指标</th><th>当前基准（7月）</th><th>目标</th></tr></thead><tbody><tr><td>周送达量（ep）</td><td>~1<span class="red">3.4</span>K/周（<span class="red">53,758</span>/月）</td><td>回到 5 月水位 ~4.5K/周（17,818/月）附近，并稳定</td></tr><tr><td>平均每人接收/月</td><td><span class="red">3.4</span></td><td>≤1.5（趋近 1.0-1.2）</td></tr><tr><td>CTR（open→click）</td><td><span class="red">13.36%</span></td><td><span class="red">≥17%</span></td></tr><tr><td>点击率（delivered→click）</td><td>2.73%</td><td>≥<span class="red">3.4</span>%（5 月水位）</td></tr><tr><td>AB2 日均增量</td><td><span class="red">+2</span></td><td>保持 ≥<span class="red">+2</span>（恢复后验证）</td></tr><tr><td>退订率</td><td>待监控</td><td>不高于停发前基线</td></tr></tbody></table>
+<blockquote>注：基准数值取自 7 月 ep 数据，wlw 及合计量待 EDM 口径初版出数后校准。</blockquote>
+<hr>
+<h2>3. 优化方案方向（待 <span class="blue">8.24</span> 评审决策）</h2>
+<h3>3.1 发送逻辑与频率控制（P0，优先级最高）</h3>
+<ul>
+<li><strong>修复重发逻辑</strong>（PGS-856）：与 Pegasus/CRM（Razvan/Dominik/Manpreet）拉齐正确规则，建议规则：
+<ul>
+<li>推荐创建后 N 周（建议 4-8 周）内，用户<strong>无任何打开/点击互动</strong>才重发，每周至多 1 次
+</li>
+<li>累计 N 次无互动重发后（或 M 周无互动后）<strong>停止发送</strong>，退出重发池
+</li>
+<li>有互动的用户进入新的推荐周期
+</li>
+</ul>
+<li><strong>频率封顶</strong>：每人全局每周至多 1 封产品推荐邮件（多触发合并），与 CX-620 会话邮件频率封顶逻辑对齐
+</li>
+<li>明确&quot;窗口期触发 → 下周一发送&quot;的合并规则，避免一人多触发多封
+</li>
+</ul>
+<h3>3.2 内容与模板质量（P1）</h3>
+<ul>
+<li>修复图片无法展示问题（template 修复，涉及 Manpreet/Dhody 团队，Dhody 8 月中休假需确认交接人）
+</li>
+<li>推荐质量 review：相似度阈值、是否展示已访问产品、6 个产品上限的合理性
+</li>
+<li>补充&quot;无推荐结果/推荐质量低&quot;时的兜底（是否发送、发送什么）
+</li>
+</ul>
+<h3>3.3 人群与触发（P1，需业务决策）</h3>
+<ul>
+<li>触发源 review：低意图触发（Notify me、category/keywords 等）是否保留
+</li>
+<li><strong>订阅机制</strong>：当前隐式触发（无需订阅），是否调整为显式 Opt-in 或提供更便捷的退订/偏好管理（与全局订阅入口优化项目联动，<span class="blue">9 月初</span>评审）
+</li>
+<li>与 8.12 scope 对齐：本策略属买家营销类触达，在 lifecycle 范围内
+</li>
+</ul>
+<h3><span class="red">3.4</span> 数据与监控配套（P0 配套）</h3>
+<ul>
+<li>EDM 业务口径初版（<span class="blue">8.24</span> 评审前交付）纳入本策略周维度监测
+</li>
+<li>策略异动告警 + 策略看板（<strong><span class="blue">8.28</span> 前完成</strong>），避免再次出现&quot;发送量翻倍一周才发现&quot;
+</li>
+<li>UC-363：campaign 下钻补 event_content 字段（支撑策略级归因）
+</li>
+<li>DAN-719：email_name 维度 UV/AB（关联打开事件）落地后用于本策略 AB 归因
+</li>
+</ul>
+<hr>
+<h2>4. 排期与里程碑（建议）</h2>
+<table><thead><tr><th>时间</th><th>事项</th></tr></thead><tbody><tr><td>8.21-<span class="blue">8.24</span></td><td>EDM 业务口径初版收尾（数据支撑）；与 Winnie/Pegasus 对齐问题清单</td></tr><tr><td><strong><span class="blue">8.24</span>（周一）</strong></td><td><strong>BRD 评审</strong>（本 PRD）</td></tr><tr><td>8.25-8.26</td><td>与 Pegasus/CRM 确认重发逻辑修复方案与排期（PGS-856）</td></tr><tr><td><span class="blue">8.28</span></td><td>策略异动告警/看板完成（与数据团队）</td></tr><tr><td><span class="blue">9 月初</span></td><td>修复上线（灰度节奏：如 10% → 50% → 100%，参照 Push 品搜推荐 7.14 灰度做法）</td></tr><tr><td>上线后</td><td>按 §2.2 指标周维度复盘，与 EDM 口径初版对照</td></tr></tbody></table>
+<h2>5. 待确认问题（<span class="blue">8.24</span> 评审前需要决策）</h2>
+<ol><li><strong>重发规则</strong>：重发窗口（建议 4-8 周）、无互动停止规则（累计 N 次/M 周）、是否看 opens —— 建议直接采用 PGS-312 原设计意图（8 周内每周重发）并修复实现</li><li><strong>频率封顶</strong>：每人每周至多 1 封是否可接受？是否需要跨策略（含系统消息）全局封顶</li><li><strong>订阅机制</strong>：本期是否引入显式 Opt-in，还是保持隐式触发 + 强化退订入口（与全局订阅入口优化项目衔接）</li><li><strong>触发源取舍</strong>：低意图触发（Notify me、category/keywords）是否保留</li><li><strong>恢复节奏</strong>：修复后灰度节奏（10%-50%-100%？）与推全时间预期</li><li><strong>与 Pegasus 的交接</strong>：策略优化后续由 Lifecycle 主导还是 Pegasus 主导（原始 PRD 归属 PGS-254）</li><li><strong>内容优化范围</strong>：本期是否包含推荐算法/模板重构，还是仅修 bug + 规则修复</li></ol>
+<hr>
+<h2>6. 风险与回滚</h2>
+<table><thead><tr><th>风险</th><th>应对</th></tr></thead><tbody><tr><td>下线期间 AB 持续损失（预估 <span class="red">-25/周</span> ep）</td><td>按排期尽快评审、修复上线；如修复排期超 <span class="blue">9 月初</span>，评估&quot;仅修复频率 bug 先行恢复&quot;的分步方案</td></tr><tr><td>重发逻辑修复后发送量骤降，可能引起整体 EDM 指标下滑</td><td>灰度放量，监测 CTR/AB/退订后再推全</td></tr><tr><td>模板修复涉及欧洲团队休假（Dhody）</td><td>提前确认交接人（Razvan/Winnie 已介入）</td></tr><tr><td>与 Pegasus/CRM 职责边界不清</td><td>8.12 已明确 lifecycle scope=买家营销类触达；本策略业务决策归 Lifecycle，技术实现归 Pegasus/CRM，评审会确认</td></tr><tr><td>归因能力不足（hs 与 ga 关联不上）</td><td>监测以 HubSpot 漏斗为主，AB/AB2 增量用归因测算口径，标注口径局限</td></tr></tbody></table>
+<hr>
+<h2>7. 背景</h2>
+<h3>7.1 策略定义（现状）</h3>
 <p>品搜推荐策略源于 PGS 团队 PRD（<code>PRD_Product_Email_Notifications_Buyers</code>，PGS-254，Utkarsha，2025），由 HubSpot 执行发送，当前线上逻辑：</p>
 <table><thead><tr><th>模块</th><th>当前规则</th></tr></thead><tbody><tr><td>触发</td><td>买家在 PDP 产生高意图行为：点击联系表单（Contact Form）、C2S/C2P、category/keywords、Notify me、相似产品 widget、portfolio 产品</td></tr><tr><td>受众</td><td>注册且登录的买家；<strong>隐式触发，无需订阅</strong>（Explicit 订阅制不在当前实现）</td></tr><tr><td>推荐逻辑</td><td>推荐相似产品，过滤用户已访问过的产品</td></tr><tr><td>邮件内容</td><td>最多 6 个产品（PDP 链接）+ Similar Product Search Link（PSERP）</td></tr><tr><td>频率</td><td>每周一发送；本周窗口期触发，下周一发送</td></tr></tbody></table>
 <p>策略命名口径：买家侧含 <code>_pur_</code>（如 <code>ep_pur_*</code>）。</p>
-<h3>2.2 策略价值（为什么不能放弃）</h3>
-<ul><li>基于 AB/AB2 增量归因测算（7 月）：<strong>EDM 品搜推荐 AB2 日均增量约 +2</strong>，仅次于 RfQ 通知（+3），是 EDM 渠道核心转化策略之一</li></ul><ul><li>原始 PRD 目标：提升 Active/Returning Buyers，O3 KR 为 ep 回归 UV 占比 20%、wlw 18%、通知打开率 8%</li></ul><ul><li>触发源为买家高意图行为，与 Push 品搜推荐（T+1h 触发）互为渠道补充</li></ul>
-<h3>2.3 当前状态：已下线整改（0806）</h3>
-<ul><li><strong>2026-08-06 策略下线整改</strong>（产品推荐邮件两个 template 停发，Winnie 同步）</li></ul><ul><li>CW32（0803-0809）影响：发送 2,164 → 1,075；对发送负向贡献 <strong>132%</strong>、打开负向贡献 <strong>190%</strong>、点击负向贡献 <strong>87%</strong>，是本周 EDM 渠道数据异动主因</li></ul><ul><li>EDM 渠道 CW32：UV 1,043（-3%）、AB 11（<strong>-32%</strong>）、AB2 11（-20%）；Winnie 预估关停对 ep AB 影响约 <strong>-25/周</strong>，wlw 无影响</li></ul><ul><li>停发期间其他策略照常，验证了品搜推荐是当前 EDM 发送量基本盘之一</li></ul>
+<h3>7.2 策略价值（为什么不能放弃）</h3>
+<ul>
+<li>基于 AB/AB2 增量归因测算（7 月）：<strong>EDM 品搜推荐 AB2 日均增量约 <span class="red">+2</span></strong>，仅次于 RfQ 通知（<span class="red">+3</span>），是 EDM 渠道核心转化策略之一
+</li>
+<li>原始 PRD 目标：提升 Active/Returning Buyers，O3 KR 为 ep 回归 UV 占比 20%、wlw 18%、通知打开率 8%
+</li>
+<li>触发源为买家高意图行为，与 Push 品搜推荐（T+1h 触发）互为渠道补充
+</li>
+</ul>
+<h3>7.3 当前状态：已下线整改（0806）</h3>
+<ul>
+<li><strong>2026-08-06 策略下线整改</strong>（产品推荐邮件两个 template 停发，Winnie 同步）
+</li>
+<li>CW32（0803-0809）影响：发送 2,164 → 1,075；对发送负向贡献 <strong><span class="red">132%</span></strong>、打开负向贡献 <strong><span class="red">190%</span></strong>、点击负向贡献 <strong><span class="red">87%</span></strong>，是本周 EDM 渠道数据异动主因
+</li>
+<li>EDM 渠道 CW32：UV 1,043（-3%）、AB 11（<strong><span class="red">-32%</span></strong>）、AB2 11（-20%）；Winnie 预估关停对 ep AB 影响约 <strong><span class="red">-25/周</span></strong>，wlw 无影响
+</li>
+<li>停发期间其他策略照常，验证了品搜推荐是当前 EDM 发送量基本盘之一
+</li>
+</ul>
 <hr>
-<h2>3. 问题定义与根因分析</h2>
-<h3>3.1 问题一：发送量失控（重发逻辑 Bug）</h3>
+<h2>8. 依赖与协作方</h2>
+<table><thead><tr><th>协作方</th><th>角色</th><th>依赖事项</th></tr></thead><tbody><tr><td>Pegasus（Utkarsha/Lars/Razvan）</td><td>策略原始 owner、发送逻辑技术</td><td>PGS-856 重发逻辑修复、PRD 口径对齐</td></tr><tr><td>CRM/HubSpot（Dominik/Manpreet/Dhody）</td><td>模板、发送</td><td>template 修复、发送规则落地</td></tr><tr><td>欧洲技术（Razvan/utk/Jacob）</td><td>排查支持</td><td>数据与逻辑验证（Razvan 已提供分析）</td></tr><tr><td>Xie Winnie（谢韵怡）</td><td>问题文档 owner</td><td>CTR drop 分析、template 停发交接</td></tr><tr><td>数据分析（詹凯亮）</td><td>EDM 看板/口径</td><td><span class="blue">8.24</span> 前口径初版、策略监测</td></tr><tr><td>监控告警（黄硕）</td><td>告警体系</td><td><span class="blue">8.28</span> 前告警覆盖</td></tr><tr><td>DA（event_content/email_name 维度）</td><td>归因支撑</td><td>UC-363、DAN-719</td></tr></tbody></table>
+<hr>
+<h2>附录 A：调研与根因分析</h2>
+<h3>A.1 问题定义与根因分析</h3>
+<h4>A.1.1 问题一：发送量失控（重发逻辑 Bug）</h4>
 <p><strong>数据（ep 为例，BPG CTR drop 分析文档）：</strong></p>
-<table><thead><tr><th>指标</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>趋势</th></tr></thead><tbody><tr><td>绝对送达量</td><td>6,453</td><td>12,094</td><td>17,818</td><td>36,352</td><td>53,758</td><td>5月→7月 ×3</td></tr><tr><td>送达（去重用户）</td><td>5,473</td><td>7,586</td><td>9,685</td><td>13,506</td><td>15,931</td><td>↑</td></tr><tr><td>平均每人接收/月</td><td>1.2</td><td>1.6</td><td>1.8</td><td>2.7</td><td><strong>3.4</strong></td><td>持续上升</td></tr><tr><td>单月收到 ≥4 封人数</td><td>28</td><td>236</td><td>565</td><td>1,159</td><td><strong>7,535</strong></td><td>7月暴增</td></tr></tbody></table>
+<table><thead><tr><th>指标</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>趋势</th></tr></thead><tbody><tr><td>绝对送达量</td><td>6,453</td><td>12,094</td><td>17,818</td><td>36,352</td><td><span class="red">53,758</span></td><td>5月→7月 <span class="red">×3</span></td></tr><tr><td>送达（去重用户）</td><td>5,473</td><td>7,586</td><td>9,685</td><td>13,506</td><td>15,931</td><td>↑</td></tr><tr><td>平均每人接收/月</td><td>1.2</td><td>1.6</td><td>1.8</td><td>2.7</td><td><strong><span class="red">3.4</span></strong></td><td>持续上升</td></tr><tr><td>单月收到 ≥4 封人数</td><td>28</td><td>236</td><td>565</td><td>1,159</td><td><strong><span class="red">7,535</span></strong></td><td>7月暴增</td></tr></tbody></table>
 <p><strong>根因（PGS-856，Razvan 定位）</strong>：</p>
-<ul><li>原设计（PGS-312）：推荐创建后 <strong>8 周（56 天）内，若无互动则每周重发</strong></li></ul><ul><li>实际实现：<strong>56 天内完全不重发，56 天后才进入每周重发池</strong>；且重发不看 opens，只看&quot;创建 56 天 + 近 7 天无任何事件（含 EMAIL_DELIVERED 自身）&quot;</li></ul><ul><li>每次重发写入 EMAIL_DELIVERED 事件 → 用户静默 7 天后可再次重发 → <strong>高频用户形成重发循环</strong></li></ul><ul><li>触发用户数 4 月-7 月基本持平（4,194 → 4,764），但送达量 ×4.4 → <strong>增量几乎全部来自重发</strong>，而非新触发</li></ul>
-<h3>3.2 问题二：邮件质量下滑（CTR 持续下降）</h3>
-<table><thead><tr><th>指标</th><th>5月</th><th>6月</th><th>7月</th></tr></thead><tbody><tr><td>打开率（open/delivered）</td><td>22.54%</td><td>23.45%</td><td>20.46%</td></tr><tr><td><strong>CTR（open→click）</strong></td><td><strong>19.36%</strong></td><td><strong>14.50%</strong></td><td><strong>13.36%</strong>（-31%）</td></tr><tr><td>点击率（delivered→click）</td><td>4.36%</td><td>3.40%</td><td>2.73%</td></tr></tbody></table>
-<ul><li>打开率稳定，CTR 与点击率持续下降 → 邮件内容质量或人群结构变化（重发池用户互动意愿递减）</li></ul><ul><li>用户反馈部分邮件<strong>图片无法正常展示</strong>（Bug Channel，template 显示问题）</li></ul><ul><li>0731 周报交叉印证：品搜推荐增发 74%（打开率仅 19%），与 QDR 转 RfQ 邮件（打开率 8%）合计占增发总量 96%，<strong>扩量未带来 AB/AB2 提升，稀释整体打开率</strong></li></ul>
-<h3>3.3 问题三：转化贡献弱化</h3>
-<ul><li>增发以&quot;无效互动用户&quot;为主，扩量阶段 AB/AB2 与上周持平（0731 周报）</li></ul><ul><li>无打开/无点击的用户仍持续收到邮件 → 边际转化趋近于零，且损害用户体验（存在退订/垃圾邮件风险，与 8.12 明确&quot;避免用户视角垃圾邮件影响留存&quot;的原则冲突）</li></ul>
-<hr>
-<h2>4. 优化目标与成功指标（建议，待评审）</h2>
-<h3>4.1 优化目标</h3>
-<ol><li><strong>频率可控</strong>：修复重发逻辑，实现每人每周至多 1 封、无互动用户 N 周后停止（具体规则见 §5）</li></ol><ol><li><strong>质量回升</strong>：修复模板展示问题，CTR（open→click）恢复并稳定在 17%+（5-6 月水位区间）</li></ol><ol><li><strong>转化恢复</strong>：恢复策略对 AB/AB2 的增量贡献，重建发送量基本盘</li></ol><ol><li><strong>体验不恶化</strong>：退订率、投诉率、垃圾邮件率不上升</li></ol>
-<h3>4.2 成功指标（监测口径以 EDM 业务口径 8.17 初版为准）</h3>
-<table><thead><tr><th>指标</th><th>当前基准（7月）</th><th>目标</th></tr></thead><tbody><tr><td>周送达量（ep）</td><td>~13.4K/周（53,758/月）</td><td>回到 5 月水位 ~4.5K/周（17,818/月）附近，并稳定</td></tr><tr><td>平均每人接收/月</td><td>3.4</td><td>≤1.5（趋近 1.0-1.2）</td></tr><tr><td>CTR（open→click）</td><td>13.36%</td><td>≥17%</td></tr><tr><td>点击率（delivered→click）</td><td>2.73%</td><td>≥3.4%（5 月水位）</td></tr><tr><td>AB2 日均增量</td><td>+2</td><td>保持 ≥+2（恢复后验证）</td></tr><tr><td>退订率</td><td>待监控</td><td>不高于停发前基线</td></tr></tbody></table>
-<blockquote>注：基准数值取自 7 月 ep 数据，wlw 及合计量待 EDM 口径初版出数后校准。</blockquote>
-<hr>
-<h2>5. 优化方案方向（待 8.18 评审决策）</h2>
-<h3>5.1 发送逻辑与频率控制（P0，优先级最高）</h3>
-<ul><li><strong>修复重发逻辑</strong>（PGS-856）：与 Pegasus/CRM（Razvan/Dominik/Manpreet）拉齐正确规则，建议规则：</li></ul><ul class="sub"><li>推荐创建后 N 周（建议 4-8 周）内，用户<strong>无任何打开/点击互动</strong>才重发，每周至多 1 次</li><li>累计 N 次无互动重发后（或 M 周无互动后）<strong>停止发送</strong>，退出重发池</li><li>有互动的用户进入新的推荐周期</li></ul><ul><li><strong>频率封顶</strong>：每人全局每周至多 1 封产品推荐邮件（多触发合并），与 CX-620 会话邮件频率封顶逻辑对齐</li></ul><ul><li>明确&quot;窗口期触发 → 下周一发送&quot;的合并规则，避免一人多触发多封</li></ul>
-<h3>5.2 内容与模板质量（P1）</h3>
-<ul><li>修复图片无法展示问题（template 修复，涉及 Manpreet/Dhody 团队，Dhody 8 月中休假需确认交接人）</li></ul><ul><li>推荐质量 review：相似度阈值、是否展示已访问产品、6 个产品上限的合理性</li></ul><ul><li>补充&quot;无推荐结果/推荐质量低&quot;时的兜底（是否发送、发送什么）</li></ul>
-<h3>5.3 人群与触发（P1，需业务决策）</h3>
-<ul><li>触发源 review：低意图触发（Notify me、category/keywords 等）是否保留</li></ul><ul><li><strong>订阅机制</strong>：当前隐式触发（无需订阅），是否调整为显式 Opt-in 或提供更便捷的退订/偏好管理（与全局订阅入口优化项目联动，9 月初评审）</li></ul><ul><li>与 8.12 scope 对齐：本策略属买家营销类触达，在 lifecycle 范围内</li></ul>
-<h3>5.4 数据与监控配套（P0 配套）</h3>
-<ul><li>EDM 业务口径（8.17 初版）纳入本策略周维度监测</li></ul><ul><li>策略异动告警 + 策略看板（8.20 前完成），避免再次出现&quot;发送量翻倍一周才发现&quot;</li></ul><ul><li>UC-363：campaign 下钻补 event_content 字段（支撑策略级归因）</li></ul><ul><li>DAN-719：email_name 维度 UV/AB（关联打开事件）落地后用于本策略 AB 归因</li></ul>
-<hr>
-<h2>6. 排期与里程碑（建议）</h2>
-<table><thead><tr><th>时间</th><th>事项</th></tr></thead><tbody><tr><td>8.15-8.17</td><td>EDM 业务口径初版（数据支撑）；与 Winnie/Pegasus 对齐问题清单</td></tr><tr><td><strong>8.18</strong></td><td><strong>BRD 评审</strong>（本 PRD）</td></tr><tr><td>8.20</td><td>策略异动告警/看板完成（与数据团队）</td></tr><tr><td>8.20 前后</td><td>与 Pegasus/CRM 确认重发逻辑修复方案与排期（PGS-856）</td></tr><tr><td>8 月底</td><td>修复上线（灰度节奏：如 10% → 50% → 100%，参照 Push 品搜推荐 7.14 灰度做法）</td></tr><tr><td>上线后</td><td>按 §4.2 指标周维度复盘，与 8.17 口径对照</td></tr></tbody></table>
-<h2>7. 依赖与协作方</h2>
-<table><thead><tr><th>协作方</th><th>角色</th><th>依赖事项</th></tr></thead><tbody><tr><td>Pegasus（Utkarsha/Lars/Razvan）</td><td>策略原始 owner、发送逻辑技术</td><td>PGS-856 重发逻辑修复、PRD 口径对齐</td></tr><tr><td>CRM/HubSpot（Dominik/Manpreet/Dhody）</td><td>模板、发送</td><td>template 修复、发送规则落地</td></tr><tr><td>欧洲技术（Razvan/utk/Jacob）</td><td>排查支持</td><td>数据与逻辑验证（Razvan 已提供分析）</td></tr><tr><td>Xie Winnie（谢韵怡）</td><td>问题文档 owner</td><td>CTR drop 分析、template 停发交接</td></tr><tr><td>数据分析（詹凯亮）</td><td>EDM 看板/口径</td><td>8.17 口径初版、策略监测</td></tr><tr><td>监控告警（黄硕）</td><td>告警体系</td><td>8.20 前告警覆盖</td></tr><tr><td>DA（event_content/email_name 维度）</td><td>归因支撑</td><td>UC-363、DAN-719</td></tr></tbody></table>
-<h2>8. 风险与回滚</h2>
-<table><thead><tr><th>风险</th><th>应对</th></tr></thead><tbody><tr><td>下线期间 AB 持续损失（预估 -25/周 ep）</td><td>按排期尽快评审、修复上线；如修复排期超 8 月底，评估&quot;仅修复频率 bug 先行恢复&quot;的分步方案</td></tr><tr><td>重发逻辑修复后发送量骤降，可能引起整体 EDM 指标下滑</td><td>灰度放量，监测 CTR/AB/退订后再推全</td></tr><tr><td>模板修复涉及欧洲团队休假（Dhody）</td><td>提前确认交接人（Razvan/Winnie 已介入）</td></tr><tr><td>与 Pegasus/CRM 职责边界不清</td><td>8.12 已明确 lifecycle scope=买家营销类触达；本策略业务决策归 Lifecycle，技术实现归 Pegasus/CRM，评审会确认</td></tr><tr><td>归因能力不足（hs 与 ga 关联不上）</td><td>监测以 HubSpot 漏斗为主，AB/AB2 增量用归因测算口径，标注口径局限</td></tr></tbody></table>
-<h2>9. 待确认问题（8.18 评审前需要决策）</h2>
-<ol><li><strong>重发规则</strong>：重发窗口（建议 4-8 周）、无互动停止规则（累计 N 次/M 周）、是否看 opens —— 建议直接采用 PGS-312 原设计意图（8 周内每周重发）并修复实现</li></ol><ol><li><strong>频率封顶</strong>：每人每周至多 1 封是否可接受？是否需要跨策略（含系统消息）全局封顶</li></ol><ol><li><strong>订阅机制</strong>：本期是否引入显式 Opt-in，还是保持隐式触发 + 强化退订入口（与全局订阅入口优化项目衔接）</li></ol><ol><li><strong>触发源取舍</strong>：低意图触发（Notify me、category/keywords）是否保留</li></ol><ol><li><strong>恢复节奏</strong>：修复后灰度节奏（10%-50%-100%？）与推全时间预期</li></ol><ol><li><strong>与 Pegasus 的交接</strong>：策略优化后续由 Lifecycle 主导还是 Pegasus 主导（原始 PRD 归属 PGS-254）</li></ol><ol><li><strong>内容优化范围</strong>：本期是否包含推荐算法/模板重构，还是仅修 bug + 规则修复</li></ol>
-<hr>
-<h3>附：信息缺口（评审前补齐）</h3>
-<ul><li>☐ wlw 侧品搜推荐数据（7 月基线）— 待 EDM 口径 8.17 初版</li></ul><ul><li>☐ 品搜推荐邮件 HubSpot 模板名与 campaign 名 — 待 Winnie/Razvan 确认（当前仅知两个 template 已停发）</li></ul><ul><li>☐ 退订率/投诉率基线 — 待 HubSpot 底表接入后补充</li></ul><ul><li>☐ PGS-856 修复排期 — 待 Pegasus/CRM 反馈</li></ul></main>
-<footer style="margin-top:40px;color:#9aa4b2;font-size:12px;text-align:center">生成于 2026-08-17 · EDM 工作空间 · 源文件：inbox/PRD_EDM一期_品搜推荐策略优化_v0.md</footer>
-</div></body></html>
+<ul>
+<li>原设计（PGS-312）：推荐创建后 <strong>8 周（56 天）内，若无互动则每周重发</strong>
+</li>
+<li>实际实现：<strong>56 天内完全不重发，56 天后才进入每周重发池</strong>；且重发不看 opens，只看&quot;创建 56 天 + 近 7 天无任何事件（含 EMAIL_DELIVERED 自身）&quot;
+</li>
+<li>每次重发写入 EMAIL_DELIVERED 事件 → 用户静默 7 天后可再次重发 → <strong>高频用户形成重发循环</strong>
+</li>
+<li>触发用户数 4 月-7 月基本持平（4,194 → 4,764），但送达量 <span class="red">×4.4</span> → <strong>增量几乎全部来自重发</strong>，而非新触发
+</li>
+</ul>
+<h4>A.1.2 问题二：邮件质量下滑（CTR 持续下降）</h4>
+<table><thead><tr><th>指标</th><th>5月</th><th>6月</th><th>7月</th></tr></thead><tbody><tr><td>打开率（open/delivered）</td><td>22.54%</td><td>2<span class="red">3.4</span>5%</td><td>20.46%</td></tr><tr><td><strong>CTR（open→click）</strong></td><td><strong>19.36%</strong></td><td><strong>14.50%</strong></td><td><strong><span class="red">13.36%</span></strong>（-31%）</td></tr><tr><td>点击率（delivered→click）</td><td>4.36%</td><td><span class="red">3.4</span>0%</td><td>2.73%</td></tr></tbody></table>
+<ul>
+<li>打开率稳定，CTR 与点击率持续下降 → 邮件内容质量或人群结构变化（重发池用户互动意愿递减）
+</li>
+<li>用户反馈部分邮件<strong>图片无法正常展示</strong>（Bug Channel，template 显示问题）
+</li>
+<li>0731 周报交叉印证：品搜推荐增发 74%（打开率仅 19%），与 QDR 转 RfQ 邮件（打开率 8%）合计占增发总量 <span class="red">96%</span>，<strong>扩量未带来 AB/AB2 提升，稀释整体打开率</strong>
+</li>
+</ul>
+<h4>A.1.3 问题三：转化贡献弱化</h4>
+<ul>
+<li>增发以&quot;无效互动用户&quot;为主，扩量阶段 AB/AB2 与上周持平（0731 周报）
+</li>
+<li>无打开/无点击的用户仍持续收到邮件 → 边际转化趋近于零，且损害用户体验（存在退订/垃圾邮件风险，与 8.12 明确&quot;避免用户视角垃圾邮件影响留存&quot;的原则冲突）
+</li>
+</ul>
+<h3>A.2 调研信息来源</h3>
+<table><thead><tr><th>来源</th><th>内容</th><th>用途</th></tr></thead><tbody><tr><td>BPG「[EDM] CTR drop for product recommendation emails」（Winnie/Yunyi）</td><td>送达量、CTR 逐月数据；重发逻辑细节</td><td>§A.1.1/A.1.2 数据与根因</td></tr><tr><td>PGS「PRD_Product_Email_Notifications_Buyers」（Utkarsha，PGS-254）</td><td>策略原始定义：触发/受众/内容/频率/成功指标</td><td>§7.1 策略定义</td></tr><tr><td>Teams 与 Xie Winnie 对话（8/14）</td><td>PGS-856 重发逻辑 bug、PRD/HubSpot Dashboard/Tableau 链接</td><td>根因定位与协作方</td></tr><tr><td>钉群「lifecycle触达项目群」（7-8 月）</td><td>8/6 停发同步、8/12 scope 明确、Push 品搜推荐灰度对照</td><td>§7.3、§4 灰度节奏</td></tr><tr><td>钉群「push edm lifecycle触达数据小团」（8 月）</td><td>EDM 看板（Query #2385）、告警配置进展</td><td>§<span class="red">3.4</span> 监控配套</td></tr><tr><td>Lifecycle Engine Weekly 0814/0731</td><td>UC-124 背景、扩量未带来 AB/AB2 提升</td><td>问题定义与优先级</td></tr></tbody></table>
+<h2>附录 B：信息缺口（评审前补齐）</h2>
+<ul class="checklist"><li class="chk">☐ wlw 侧品搜推荐数据（7 月基线）— 待 EDM 口径初版（<span class="blue">8.24</span> 前）</li><li class="chk">☐ 品搜推荐邮件 HubSpot 模板名与 campaign 名 — 待 Winnie/Razvan 确认（当前仅知两个 template 已停发）</li><li class="chk">☐ 退订率/投诉率基线 — 待 HubSpot 底表接入后补充</li><li class="chk">☐ PGS-856 修复排期 — 待 Pegasus/CRM 反馈（8.25-8.26 对齐）</li></ul>
+<footer style="text-align:center;color:#98a0b3;font-size:12px;margin:30px 0 10px;">大桔Jolyne · 起草 2026-08-15 · 更新 2026-08-21 · 口径来源：BPG / PGS / Teams / 钉群 / Weekly（见附录 A.2）</footer>
+</div>
+</body>
+</html>
